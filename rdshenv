@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Example parameters, all these are default
+# RDSH_ALERT_SHELL=true
+# RDSH_ALERT_ENV=false
+# RDSH_ALERT_SYSTEM_ENV=false
+
+# RDSH_SHELL_FILES+=()
+# bash is usually included already, by being present in /etc/shells
+# SHELLS+=(/bin/bash)

@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# RDSH - Random Shell
+
+# RDSH is a shell that picks a random shell on your system and runs with it.
+# By default it uses login shells defined under /etc/shells
+
+# You can modify the shells by creating a ~/.rdshenv file
+# if you define multiple envs (e.g., ~/.rdshenv, ~/.rdshenv2, ~/.rdshenv3),
+# RDSH will run one at random.
+
+# RDSH will also look for a system wide config (/etc/rdshenv*) and run one at random.
+# Configurable environment variables are defined below.
+set -ue
+shopt -s nullglob
+
+
+RDSH_ALERT_SHELL="${RDSH_ALERT_SHELL:-true}"
+RDSH_ALERT_ENV="${RDSH_ALERT_ENV:-false}"
+RDSH_ALERT_SYSTEM_ENV="${RDSH_ALERT_SYSTEM_ENV:-false}"
+RDSH_SHELL_FILES=(/etc/shells)
+SHELLS=()
+
+
+rand_el() {
+    if [ $# -ne 0 ];then
+        IDX=$((($RANDOM % $#) + 1))
+        printf '%s' "${!IDX}"
+    fi
+}
+SYSTEM_ENV=$(rand_el /etc/rdshenv*)
+source "${SYSTEM_ENV:-/dev/null}"
+if [[ "$RDSH_ALERT_SYSTEM_ENV" == true ]]; then
+    echo "${RDSH_ALERT_SYSTEM_ENV_PREFIX:-}$SYSTEM_ENV"
+fi
+
+RDSH_ENV=$(rand_el ~/.rdshenv*)
+source "${RDSH_ENV:-/dev/null}"
+if [[ "$RDSH_ALERT_ENV" == true ]]; then
+    echo "${RDSH_ALERT_ENV_PREFIX:-}$RDSH_ENV"
+fi
+
+while IFS= read -r LINE; do
+    SHELLS+=("$LINE")
+done < <(grep -h "^/" "${RDSH_SHELL_FILES[@]}" /dev/null)
+
+DRY_RUN=false
+while getopts "ln" opt; do
+    case "$opt" in
+        l)
+            echo "shells:"
+            printf '%s\n' "${SHELLS[@]}"
+            exit
+            ;;
+        n)
+            DRY_RUN=true
+            ;;
+    esac
+done
+
+SHELL=$(rand_el "${SHELLS[@]}")
+if [[ "$RDSH_ALERT_SHELL" == true || "$DRY_RUN" == true ]]; then
+    echo "${RDSH_ALERT_SHELL_PREFIX:-}$SHELL"
+fi
+if [[ "$DRY_RUN" != true ]]; then
+    FROM_RDSH=true exec "$SHELL"
+fi
