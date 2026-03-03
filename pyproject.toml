@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdsh"
+version = "1.0"
+description = "The shell picker of the future"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = { file = "LICENSE.md" }
+requires-python = ">=3.0"
+authors = [{name = "Slackow"}]
+keywords = ["rdsh", "random", "shell"]
+
+[project.urls]
+Repository = "https://github.com/Slackow/rdsh.git"
+Issues = "https://github.com/Slackow/rdsh/issues"
+
+[tool.setuptools]
+packages = []
+script-files = ["rdsh"]
