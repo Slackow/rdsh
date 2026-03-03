@@ -15,6 +15,16 @@ The `-l` and `-n` options exist,
 
 The shell is entirely written in bash.
 
-please add it to your path, or even better, use it as your login shell `chsh -s "$(which rdsh)"`.
+Read through the source code (`rdsh`) to understand your options.
 
-Read through the source code to understand your options.
+## Installation
+1. Add it to your path
+- Pip install it globally `pip install rdsh`
+- Or manually download `sudo curl -fsSL "https://raw.githubusercontent.com/Slackow/rdsh/HEAD/rdsh" -o /usr/bin/rdsh`
+2. Use it as your login shell (recommended)
+- Run `sudo bash -c "which rdsh >> /etc/shells"`
+- Run `chsh -s "$(which rdsh)"`
+3. copy `rdshenv` into `~/.rdshenv`, and configure it however you like.
+- `curl -fsSL "https://raw.githubusercontent.com/Slackow/rdsh/HEAD/rdshenv" -o ~/.rdshenv`
+4. add another env (recommended)
+- `curl -fsSL "https://raw.githubusercontent.com/Slackow/rdsh/HEAD/rdshenv" -o ~/.rdshenv2`
